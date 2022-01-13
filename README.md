@@ -13,7 +13,7 @@ BIGipServer<pool_name>=1677787402.36895.0000
 Sample usage:
 
 ```
-$ python3 BIGIP_decode_cookie.py BIGipServer<pool_name>=1677787402.36895.0000
+$ python3 bigip_decode_cookie.py BIGipServer<pool_name>=1677787402.36895.0000
 
 [*] Cookie to decode: BIGipServer<pool_name>=1677787402.36895.0000
 
