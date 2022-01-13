@@ -1,28 +1,26 @@
 #!/usr/bin/python
 
-# example string: BIGip<ervername>110536896.20480.0000
+# example string: BIGipServer<pool_name>=1677787402.36895.0000
 
-import struct
 import sys
-import re
+import struct
 
 if len(sys.argv) != 2:
-    print "Usage: %s cookie" % sys.argv[0]
-    exit(1)
+    print(f"Usage: {sys.argv[0]} cookie")
+    sys.exit()
 
 cookie = sys.argv[1]
-print "\n[*] Cookie to decode: %s\n" % cookie
+print(f"\n[*] Cookie to decode: {cookie}\n")
 
-(cookie_name, cookie_value) = cookie.split('=')
+cookie = cookie.split("BIGipServer")[1]
+cookie_name, cookie_value = cookie.split('=')
 
-pool = re.search('^BIGipServer([.\w\.]*)', cookie_name)
+host, port, _ = cookie_value.split('.')
 
-(host, port, end) = cookie_value.split('.')
+ip = ".".join([str(i) for i in struct.pack("<I", int(host))])
 
-(a, b, c, d) = [ord(i) for i in struct.pack("<I", int(host))]
+port_hex = list(struct.pack("<H", int(port)))
+port = int(f"0x{port_hex[0]:x}{port_hex[1]:x}", 16)
 
-(e) = [ord(e) for e in struct.pack("<H", int(port))]
-port = "0x%02X%02X" % (e[0],e[1])
-
-print "[*] Pool name: %s" % (pool.group(1))
-print "[*] Decoded IP and Port: %s.%s.%s.%s:%s\n" % (a,b,c,d, int(port,16))
+print(f"[*] Pool name: {cookie_name}")
+print(f"[*] Decoded IP and Port: {ip}:{port}")
